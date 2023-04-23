@@ -13,6 +13,62 @@ class MongooseAPIManager {
         return true;
     }
 
+    async fetchAllOrders() {
+        try {
+            //pickout the user.id
+            const allOrders = await this.NoteModel.find({});
+            // Convert mongoose _id to id
+            const allOrderObjects = allOrders.map(element => {
+                return element.toObject()
+            })
+            console.log(chalk.blueBright.inverse('All orders loaded'));
+            return allOrderObjects
+        } catch (e) {
+            console.log(chalk.blueBright.inverse('Empty notes loaded'));
+            return []
+        }
+    } catch(error) {
+
+    }
+
+    async addOrder() {
+        // Check that we have a selected user
+        if (user) {
+            // The uniqueness for the title is now per user!
+            //pickout the user.id
+            const haveDuplicateNote = await this.NoteModel.findOne({ belongsTo: user.id, title }).lean();
+            if (!haveDuplicateNote) {
+                const newNote = {
+                    title: title, // or shorter just title
+                    body: body,  // or shorter just body
+                    belongsTo: user.id
+                };
+                // Here we get a database document back, we like to return a POJO, plain javascript object back so we stay neutral to the db tech.
+                const addedNoteDocument = await this.NoteModel.create(newNote);
+
+                if (addedNoteDocument) {
+                    console.log(chalk.green.inverse('New note added!'));
+                    // Convert from Mongoose to plain object
+                    const savedNote = addedNoteDocument.toObject();
+                    return savedNote;
+                } else
+                    console.log(chalk.red.inverse('Error in db creating the new note!'))
+            } else
+                console.log(chalk.red.inverse('Note title taken!'))
+        } else
+            console.log(chalk.red.inverse('No user given!'))
+
+        // here when something wrong
+        return null;
+
+    }
+
+
+
+
+
+
+
     async fetchNotes(user) {
         try {
             // No lean here so we can use toObject

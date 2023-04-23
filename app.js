@@ -36,7 +36,7 @@ if (process.env.NODE_ENV !== "test") {
 
 import { fileURLToPath } from 'node:url';
 const filename = fileURLToPath(import.meta.url);
-const dirname =  path.dirname(filename)
+const dirname = path.dirname(filename)
 
 // view engine setup
 app.set('views', path.join(dirname, 'views'));
@@ -60,6 +60,8 @@ app.use(cors());
 * Infrastructures: Mongoose storage
 */
 // Select Mongoose based db
+import Storage from './storage/mongoDB/MongooseStorage.js'
+Storage.ConnectCreateAndSeed(app)
 
 /**
 * Middlewares: Mongoose authentication

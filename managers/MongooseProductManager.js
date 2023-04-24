@@ -17,12 +17,13 @@ class MongooseProductManager {
         // On a query we can use lean to get a plain javascript object
         // Use mongoose criteria for id and belongsTo user
         //pick user.id
+        console.log('id: '+id)
         const foundOrders = await this.productModel.find({ orderId: id });
 
         if (foundOrders) {
             console.log(chalk.green.inverse('Found orders ' + foundOrders));
             // Convert to POJO
-            return foundOrders.toObject();
+            return foundOrders//.toObject();
         } else {
             console.log(chalk.red.inverse(`Note not found with id =${id} !`))
         }

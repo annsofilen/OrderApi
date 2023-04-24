@@ -32,10 +32,10 @@ class ProductController {
     */
     listAllProducts = async (req, res) => {
         try {
-            const allOrders = await this.theProductManager.getProductOfOrderId(req.params.id);
-            if (allOrders.length > 0) {
+            const allOrders = await this.theProductManager.getProductOfOrderId(req.params.orderid);
+            if (allOrders) {
                 const orders = allOrders.map(document => this.includeData(document));
-                console.log("list everything")
+                console.log("list everything!!")
                 return apiResponse.successResponseWithData(res, "Operation success", orders);
             } else {
                 return apiResponse.successResponseWithData(res, "Operation success", []);

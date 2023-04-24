@@ -1,10 +1,10 @@
 import chalk from 'chalk';
-import Note from '../models/NoteModel.js';
+import Order from '../models/OrderModel.js';
 
 class MongooseAPIManager {
     constructor() {
         // For note manager, so that we remember the class used 
-        this.NoteModel = Note;
+        this.OrderModel = Order;
     }
 
     async initialize(app = null) {
@@ -16,7 +16,7 @@ class MongooseAPIManager {
     async fetchAllOrders() {
         try {
             //pickout the user.id
-            const allOrders = await this.NoteModel.find({});
+            const allOrders = await this.OrderModel.find({});
             // Convert mongoose _id to id
             const allOrderObjects = allOrders.map(element => {
                 return element.toObject()
@@ -36,11 +36,10 @@ class MongooseAPIManager {
         if (user) {
             // The uniqueness for the title is now per user!
             //pickout the user.id
-            const haveDuplicateNote = await this.NoteModel.findOne({ belongsTo: user.id, title }).lean();
+            const haveDuplicateNote = await this.OrderModel.findOne({ belongsTo: user.id, title }).lean();
             if (!haveDuplicateNote) {
-                const newNote = {
+                const newOrder = {
                     title: title, // or shorter just title
-                    body: body,  // or shorter just body
                     belongsTo: user.id
                 };
                 // Here we get a database document back, we like to return a POJO, plain javascript object back so we stay neutral to the db tech.
@@ -73,7 +72,7 @@ class MongooseAPIManager {
         try {
             // No lean here so we can use toObject
             //pickout the user.id
-            const allNotesBelongingToUser = await this.NoteModel.find({ belongsTo: user.id });
+            const allNotesBelongingToUser = await this.OrderModel.find({ belongsTo: user.id });
             // Convert mongoose _id to id
             const allNoteObjects = allNotesBelongingToUser.map(element => {
                 return element.toObject()
@@ -91,7 +90,7 @@ class MongooseAPIManager {
         if (user) {
             // The uniqueness for the title is now per user!
             //pickout the user.id
-            const haveDuplicateNote = await this.NoteModel.findOne({ belongsTo: user.id, title }).lean();
+            const haveDuplicateNote = await this.OrderModel.findOne({ belongsTo: user.id, title }).lean();
             if (!haveDuplicateNote) {
                 const newNote = {
                     title: title, // or shorter just title

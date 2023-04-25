@@ -17,7 +17,7 @@ class MongooseProductManager {
         // On a query we can use lean to get a plain javascript object
         // Use mongoose criteria for id and belongsTo user
         //pick user.id
-        console.log('id: '+id)
+        console.log('id: ' + id)
         const foundOrders = await this.productModel.find({ orderId: id });
 
         if (foundOrders) {
@@ -29,6 +29,22 @@ class MongooseProductManager {
         }
 
         return null;
+    }
+
+
+    async addProduct(newProduct) {
+        //console.log(JSON.stringify(req.body))
+        console.log('productmanager newProduct: ' + JSON.stringify(newProduct))
+        const addedProductDocument = await this.productModel.create(newProduct);
+console.log(addedProductDocument)
+        if (addedProductDocument) {
+            console.log(chalk.green.inverse('New product added in manager!'));
+            // Convert from Mongoose to plain object
+            const savedProduct = addedProductDocument.toObject();
+            console.log('saved product: ' + savedProduct)
+            return savedProduct;
+        } else
+            console.log(chalk.red.inverse('Error in db creating the new product!'))
     }
 }
 

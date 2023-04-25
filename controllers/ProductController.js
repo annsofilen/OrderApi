@@ -32,9 +32,9 @@ class ProductController {
     */
     listAllProducts = async (req, res) => {
         try {
-            const allOrders = await this.theProductManager.getProductOfOrderId(req.params.orderid);
-            if (allOrders) {
-                const orders = allOrders.map(document => this.includeData(document));
+            const allProducts = await this.theProductManager.getProductOfOrderId(req.params.orderid);
+            if (allProducts) {
+                const orders = allProducts.map(document => this.includeData(document));
                 console.log("list everything!!")
                 return apiResponse.successResponseWithData(res, "Operation success", orders);
             } else {
@@ -46,6 +46,33 @@ class ProductController {
             return apiResponse.errorResponse(res, err);
         }
     }
+
+
+    createProduct = async (req, res) => {
+        try {
+            console.log('req: ' + req);
+            
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+            } else {
+                //Save product.
+                const createdProduct = await this.theProductManager.addProduct(req.body);
+                console.log('createdProduct: ' + createdProduct);
+                if (!createdProduct) {
+                    return apiResponse.errorResponse(res, 'Could not create product');
+                } else {
+                    let productData = this.includeData(createdProduct);
+                    console.log(productData + ' productData')
+                    return apiResponse.successResponseWithData(res, "product add Success.", productData);
+                };
+            }
+        } catch (error) {
+            return apiResponse.errorResponse(res, error);
+        }
+    }
+
 
 }
 

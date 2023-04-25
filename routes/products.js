@@ -10,7 +10,7 @@ const router = express.Router();
 
 
 router.get("/:orderid", theProductController.listAllProducts)
-//router.post("/", theOrderController.create);
+router.post("/", theProductController.createProduct);
 
 //router.get("/", theOrdersApiController.list)
 //router.get("/", Authenticator.authenticateApi, theOrderController.listEverything)

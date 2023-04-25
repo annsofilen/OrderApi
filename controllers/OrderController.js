@@ -41,21 +41,28 @@ class OrdersApiController {
         }
     }
 
-    // list2 = async (req, res) => {
-    //     try {
-    //         const allOrders = await this.OrderManager.fetchOrders(req.user);
-    //         if (allOrders.length > 0) {
-    //             const orders = allOrders//.map(document => this.includeData(document));
-    //             return apiResponse.successResponseWithData(res, "Operation success", orders);
-    //         } else {
-    //             return apiResponse.successResponseWithData(res, "Operation success", []);
-    //         }
-    //         //});
-    //     } catch (err) {
-    //         //throw error in json response with status 500. 
-    //         return apiResponse.errorResponse(res, err);
-    //     }
-    // }
+
+    createOrder = async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+            } else {
+                //Save order.
+                const createdOrder = await this.OrderManager.addOrder( req.body);
+                if (!createdOrder) {
+                    return apiResponse.errorResponse(res, 'Could not create order');
+                } else {
+                    let orderData = this.includeData(createdOrder);
+                    return apiResponse.successResponseWithData(res, "Order add Success.", orderData);
+                };
+            }
+        } catch (error) {
+
+        }
+    }
+
+
 
 
     // /**

@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 router.get("/", theOrderController.listEverything)
-//router.post("/", theOrderController.create);
+router.post("/", theOrderController.createOrder);
 
 //router.get("/", theOrdersApiController.list)
 //router.get("/", Authenticator.authenticateApi, theOrderController.listEverything)

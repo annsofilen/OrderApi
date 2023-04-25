@@ -31,36 +31,57 @@ class MongooseAPIManager {
 
     }
 
+
+
     async addOrder() {
-        // Check that we have a selected user
-        if (user) {
-            // The uniqueness for the title is now per user!
-            //pickout the user.id
-            const haveDuplicateNote = await this.OrderModel.findOne({ belongsTo: user.id, title }).lean();
-            if (!haveDuplicateNote) {
-                const newOrder = {
-                    title: title, // or shorter just title
-                    belongsTo: user.id
-                };
-                // Here we get a database document back, we like to return a POJO, plain javascript object back so we stay neutral to the db tech.
-                const addedNoteDocument = await this.NoteModel.create(newNote);
+        const newOrder = {
+            //belongsTo: user.id
+        };
+        // Here we get a database document back, we like to return a POJO, plain javascript object back so we stay neutral to the db tech.
+        const addedOrderDocument = await this.OrderModel.create(newOrder);
 
-                if (addedNoteDocument) {
-                    console.log(chalk.green.inverse('New note added!'));
-                    // Convert from Mongoose to plain object
-                    const savedNote = addedNoteDocument.toObject();
-                    return savedNote;
-                } else
-                    console.log(chalk.red.inverse('Error in db creating the new note!'))
-            } else
-                console.log(chalk.red.inverse('Note title taken!'))
+        if (addedOrderDocument) {
+            console.log(chalk.green.inverse('New order added!'));
+            // Convert from Mongoose to plain object
+            const savedOrder = addedOrderDocument.toObject();
+            return savedOrder;
         } else
-            console.log(chalk.red.inverse('No user given!'))
-
+            console.log(chalk.red.inverse('Error in db creating the new order!'))
         // here when something wrong
         return null;
 
     }
+
+    // async addOrder() {
+    //     // Check that we have a selected user
+    //     if (user) {
+    //         // The uniqueness for the title is now per user!
+    //         //pickout the user.id
+    //         const haveDuplicateNote = await this.OrderModel.findOne({ belongsTo: user.id, title }).lean();
+    //         if (!haveDuplicateNote) {
+    //             const newOrder = {
+    //                 title: title, // or shorter just title
+    //                 belongsTo: user.id
+    //             };
+    //             // Here we get a database document back, we like to return a POJO, plain javascript object back so we stay neutral to the db tech.
+    //             const addedNoteDocument = await this.NoteModel.create(newNote);
+
+    //             if (addedNoteDocument) {
+    //                 console.log(chalk.green.inverse('New note added!'));
+    //                 // Convert from Mongoose to plain object
+    //                 const savedNote = addedNoteDocument.toObject();
+    //                 return savedNote;
+    //             } else
+    //                 console.log(chalk.red.inverse('Error in db creating the new note!'))
+    //         } else
+    //             console.log(chalk.red.inverse('Note title taken!'))
+    //     } else
+    //         console.log(chalk.red.inverse('No user given!'))
+
+    //     // here when something wrong
+    //     return null;
+
+    // }
 
 
 

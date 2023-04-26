@@ -97,7 +97,7 @@ class MongooseProductManager {
         // Use mongoose criteria for id and belongsTo user
         //pick user.id
 
-        const result = await this.productModel.deleteOne({ _id: productId });
+        const result = await this.productModel.deleteOne({ id: productId });
 
         if (result.deletedCount > 1) {
             console.log("Product deleted successfully")

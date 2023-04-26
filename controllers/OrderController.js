@@ -69,16 +69,16 @@ class OrdersApiController {
         //console.log('order delete req.params.id: ' + req.params.orderid)
 
         try {
-            const orderId = req.params.orderId;
-
+            const orderId = req.params.orderid;
+            console.log(orderId + ' in delete in controller order ' + req.params.orderid);
             let result = this.OrderManager.deleteOrder(req.params.orderid);
-            //console.log("reuslt: " + result)
             let result2 = this.theProductManager.deleteProductOfOrderId(req.params.orderid)
             return apiResponse.successResponseWithData(res, "Order delete Success.")
 
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Server error" });
+
         }
     }
 

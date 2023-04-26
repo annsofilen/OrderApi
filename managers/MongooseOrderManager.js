@@ -1,10 +1,12 @@
 import chalk from 'chalk';
 import Order from '../models/OrderModel.js';
+import MongooseProductManager from './MongooseProductManager.js';
 
 class MongooseAPIManager {
     constructor() {
         // For note manager, so that we remember the class used 
         this.OrderModel = Order;
+        this.MongooseProductManager = new MongooseProductManager()
     }
 
     async initialize(app = null) {
@@ -59,6 +61,7 @@ class MongooseAPIManager {
         //console.log('id of order to delete: ' + id)
 
         const result = await this.OrderModel.deleteOne({ _id: id });
+        await this.MongooseProductManager.deleteProductOfOrderId(id)
 
         if (result.deletedCount === 1) {
             console.log("Order deleted successfully")

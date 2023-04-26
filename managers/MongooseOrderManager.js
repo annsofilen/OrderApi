@@ -52,6 +52,22 @@ class MongooseAPIManager {
 
     }
 
+    async deleteOrder(id) {
+        // On a query we can use lean to get a plain javascript object
+        // Use mongoose criteria for id and belongsTo user
+        //pick user.id
+        //console.log('id of order to delete: ' + id)
+
+        const result = await this.OrderModel.deleteOne({ _id: id });
+
+        if (result.deletedCount === 1) {
+            console.log("Order deleted successfully")
+        } else {
+            console.log("Order not found successfully")
+        }
+
+    }
+
     // async addOrder() {
     //     // Check that we have a selected user
     //     if (user) {

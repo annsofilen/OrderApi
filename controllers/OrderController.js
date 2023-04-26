@@ -1,6 +1,7 @@
 import { check, body, validationResult } from "express-validator";
 import apiResponse from "../helpers/apiResponse.js";
 import MongooseOrderManager from '../managers/MongooseOrderManager.js'
+import OrderModel from '../models/OrderModel.js';
 
 
 class OrdersApiController {
@@ -49,7 +50,7 @@ class OrdersApiController {
                 return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
             } else {
                 //Save order.
-                const createdOrder = await this.OrderManager.addOrder( req.body);
+                const createdOrder = await this.OrderManager.addOrder(req.body);
                 if (!createdOrder) {
                     return apiResponse.errorResponse(res, 'Could not create order');
                 } else {
@@ -59,6 +60,22 @@ class OrdersApiController {
             }
         } catch (error) {
 
+        }
+    }
+
+    deleteOrder = async (req, res) => {
+        //console.log('order delete req.params.id: ' + req.params.orderid)
+
+        try {
+            const orderId = req.params.orderId;
+
+            let result = this.OrderManager.deleteOrder(req.params.orderid);
+            //console.log("reuslt: " + result)
+            return apiResponse.successResponseWithData(res, "Order delete Success.")
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Server error" });
         }
     }
 

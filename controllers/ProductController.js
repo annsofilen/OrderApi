@@ -50,9 +50,7 @@ class ProductController {
 
     createProduct = async (req, res) => {
         try {
-            console.log('req: ' + req);
-            
-
+            console.log('req head: ' + JSON.stringify(req.head))
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
@@ -72,6 +70,66 @@ class ProductController {
             return apiResponse.errorResponse(res, error);
         }
     }
+
+    deleteOneProduct = async (req, res) => {
+        //console.log('order delete req.params.id: ' + req.params.orderid)
+
+        try {
+            const productId = req.params.productid;
+
+            let result = this.theProductManager.deleteProductOfId(req.params.productid);
+            console.log("reuslt: " + result)
+            if (result) {
+                return apiResponse.successResponseWithData(res, "Product delete Success.")
+            }
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Server error" });
+        }
+    }
+
+    deleteManyProductsOrderId = async (req, res) => {
+        //console.log('order delete req.params.id: ' + req.params.orderid)
+
+        try {
+            const orderId = req.params.orderid;
+
+            let result = this.theProductManager.deleteProductOfOrderId(req.params.orderid);
+            console.log("reuslt: " + result)
+            if (result) {
+                return apiResponse.successResponseWithData(res, "Products delete Success.")
+            }
+
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Server error" });
+        }
+    }
+
+    // async (req, res) => {
+    //         try {
+    //             //k wNote.findById(req.params.id, function (err, foundNote) {
+    //             const foundOrder = await this.OrderManager.getOrderById(req.user, req.params.id);
+    //             if (foundOrder === null) {
+    //                 return apiResponse.notFoundResponse(res, "Order not exists with this id");
+    //             } else {
+    //                 //delete note.
+    //                 const removedOrder = await this.OrderManager.removeOrder(req.user, req.params.id);
+    //                 if (!removedOrder) {
+    //                     return apiResponse.errorResponse(res, 'Could not delete the order');
+    //                 } else {
+    //                     return apiResponse.successResponse(res, "order delete Success.");
+    //                 }
+
+    //             }
+
+    //         } catch (err) {
+    //             //throw error in json response with status 500. 
+    //             return apiResponse.errorResponse(res, err);
+    //         }
+    //     }
 
 
 }

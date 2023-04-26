@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get("/", theOrderController.listEverything)
 router.post("/", theOrderController.createOrder);
+router.delete("/:orderid", theOrderController.deleteOrder);
 
 //router.get("/", theOrdersApiController.list)
 //router.get("/", Authenticator.authenticateApi, theOrderController.listEverything)

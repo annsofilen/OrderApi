@@ -31,12 +31,31 @@ class MongooseProductManager {
         return null;
     }
 
+    async getProductOfId(id) {
+        // On a query we can use lean to get a plain javascript object
+        // Use mongoose criteria for id and belongsTo user
+        //pick user.id
+        console.log('id: ' + id)
+        const foundProduct = await this.productModel.find({ id: id });
+        console.log('found product: ' + foundProduct)
+
+        if (foundProduct) {
+            console.log(chalk.green.inverse('Found product with id: ' + id + foundProduct));
+            // Convert to POJO
+            return foundProduct.toObject();
+        } else {
+            console.log(chalk.red.inverse(`Product not found with id =${id} !`))
+        }
+
+        return null;
+    }
+
 
     async addProduct(newProduct) {
         //console.log(JSON.stringify(req.body))
         console.log('productmanager newProduct: ' + JSON.stringify(newProduct))
         const addedProductDocument = await this.productModel.create(newProduct);
-console.log(addedProductDocument)
+        console.log(addedProductDocument)
         if (addedProductDocument) {
             console.log(chalk.green.inverse('New product added in manager!'));
             // Convert from Mongoose to plain object
@@ -45,6 +64,48 @@ console.log(addedProductDocument)
             return savedProduct;
         } else
             console.log(chalk.red.inverse('Error in db creating the new product!'))
+    }
+
+
+
+    async deleteProductOfOrderId(id) {
+        // On a query we can use lean to get a plain javascript object
+        // Use mongoose criteria for id and belongsTo user
+        //pick user.id
+        //console.log('id of order to delete: ' + id)
+        const foundProducts = await this.productModel.find({ orderId: id });
+        console.log('product count: ' + foundProducts.length);
+        const result = await this.productModel.deleteMany({ orderId: id });
+        if (foundProducts.length > 0) {
+            if (result.deletedCount > 0) {
+                console.log("Products deleted successfully")
+                return true
+            } else {
+                console.log("Product not found ")
+                return false
+            }
+        } else {
+            console.log('no products pof orderid found')
+            return false
+        }
+
+
+    }
+
+    async deleteProductOfId(productId) {
+        // On a query we can use lean to get a plain javascript object
+        // Use mongoose criteria for id and belongsTo user
+        //pick user.id
+
+        const result = await this.productModel.deleteOne({ _id: productId });
+
+        if (result.deletedCount > 1) {
+            console.log("Product deleted successfully")
+            return true
+        } else {
+            console.log("Product not found successfully")
+            return false
+        }
     }
 }
 

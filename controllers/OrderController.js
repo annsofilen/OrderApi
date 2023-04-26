@@ -2,11 +2,13 @@ import { check, body, validationResult } from "express-validator";
 import apiResponse from "../helpers/apiResponse.js";
 import MongooseOrderManager from '../managers/MongooseOrderManager.js'
 import OrderModel from '../models/OrderModel.js';
+import MongooseProductManager from "../managers/MongooseProductManager.js";
 
 
 class OrdersApiController {
     constructor() {
         this.OrderManager = new MongooseOrderManager();
+        this.theProductManager = new MongooseProductManager();
     }
 
     /**
@@ -71,6 +73,7 @@ class OrdersApiController {
 
             let result = this.OrderManager.deleteOrder(req.params.orderid);
             //console.log("reuslt: " + result)
+            let result2 = this.theProductManager.deleteProductOfOrderId(req.params.orderid)
             return apiResponse.successResponseWithData(res, "Order delete Success.")
 
         } catch (error) {

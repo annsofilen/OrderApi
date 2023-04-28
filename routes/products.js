@@ -12,6 +12,7 @@ const router = express.Router();
 router.get("/:orderid", theProductController.listAllProducts)
 router.post("/", theProductController.createProduct);
 router.delete("/:productid", theProductController.deleteOneProduct)
+router.put("/:productid", theProductController.updateProduct)
 
 //router.delete("/:orderid", theProductController.deleteManyProductsOrderId) //will never be used
 

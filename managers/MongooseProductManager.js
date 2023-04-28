@@ -70,67 +70,67 @@ class MongooseProductManager {
 
 
     async deleteProductsOfOrderId(id) {
-        // On a query we can use lean to get a plain javascript object
-        // Use mongoose criteria for id and belongsTo user
-        //pick user.id
-        //console.log('id of order to delete: ' + id)
-        const foundProducts = await this.productModel.find({ orderId: id });
 
-        if (foundProducts.length > 0) {
-            console.log('products count: ' + foundProducts.length);
-            let result = await this.productModel.deleteMany({ orderId: id });
-            if (result.deletedCount > 0) {
-                console.log("Delete count: " + result.deletedCount + JSON.stringify(result))
+        try {
+
+
+            // On a query we can use lean to get a plain javascript object
+            // Use mongoose criteria for id and belongsTo user
+            //pick user.id
+            //console.log('id of order to delete: ' + id)
+            const foundProducts = await this.productModel.find({ orderId: id });
+
+            if (foundProducts.length > 0) {
+                console.log('products count: ' + foundProducts.length);
+                let result = await this.productModel.deleteMany({ orderId: id });
+                if (result.deletedCount > 0) {
+                    console.log("Delete count: " + result.deletedCount + JSON.stringify(result))
+                }
+                if (result.deletedCount === 0) {
+                    console.log("Delete count ZERO: " + result.deletedCount + JSON.stringify(result))
+                }
+                console.log("Products deleted successfully" + JSON.stringify(result))
+                return result
+            } else {
+                console.log("No products found ")
+                return false
             }
-            if (result.deletedCount === 0) {
-                console.log("Delete count ZERO: " + result.deletedCount + JSON.stringify(result))
-            }
-            console.log("Products deleted successfully" + JSON.stringify(result))
-            return result
-        } else {
-            console.log("No products found ")
-            return false
+
         }
-
+        catch (error) {
+            console.log(error)
+        }
 
     }
 
     async deleteProductOfId(id) {
+        try {
 
-        const foundProducts = await this.productModel.find({ _id: id });
-        console.log('found: ' + foundProducts)
 
-        if (foundProducts.length > 0) {
-            console.log('Product count: ' + foundProducts.length);
-            let result = await this.productModel.deleteMany({ _id: id });
-            if (result.deletedCount > 0) {
-                console.log('product count: ' + foundProducts.length);
-                console.log("Delete count: " + result.deletedCount + JSON.stringify(result))
+            const foundProducts = await this.productModel.find({ _id: id });
+            console.log('found: ' + foundProducts)
+
+            if (foundProducts.length > 0) {
+                console.log('Product count: ' + foundProducts.length);
+                let result = await this.productModel.deleteMany({ _id: id });
+                if (result.deletedCount > 0) {
+                    console.log('product count: ' + foundProducts.length);
+                    console.log("Delete count: " + result.deletedCount + JSON.stringify(result))
+                }
+                if (result.deletedCount === 0) {
+                    console.log("Delete count ZERO: " + result.deletedCount + JSON.stringify(result))
+                }
+                console.log("Products deleted successfully" + JSON.stringify(result))
+                return result
+            } else {
+                console.log("No products found ")
+                return false
             }
-            if (result.deletedCount === 0) {
-                console.log("Delete count ZERO: " + result.deletedCount + JSON.stringify(result))
-            }
-            console.log("Products deleted successfully" + JSON.stringify(result))
-            return result
-        } else {
-            console.log("No products found ")
-            return false
+        }
+        catch (error) {
+            console.log(error)
         }
 
-        /*         try {
-                    const product = await Product.findById(productId).lean().exec();
-                    if (!product) {
-                        console.log(`No product found with the given ID: ${productId}`);
-                        return null;
-                    }
-                    console.log(`Product found: ${JSON.stringify(product)}`);
-                    const result = await this.productModel.deleteOne({ id: productId }).exec();
-                    console.log(`Delete result: ${JSON.stringify(result)}`);
-                    return result;
-                } catch (error) {
-                    console.error(error);
-                    return null;
-                } */
     }
 
 

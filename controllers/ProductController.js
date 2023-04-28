@@ -113,6 +113,26 @@ class ProductController {
         }
     }
 
+    updateProduct = async (req, res) => {
+        try {
+            const productId = req.params.productid;
+            let updateObject = req.body;
+            console.log('req.params.productid: ' + req.params.productid)
+            console.log('update object: ' + JSON.stringify(updateObject))
+            const result = await this.theProductManager.updateProductOfId(productId, req.body)
+            if (result) {
+                console.log(chalk.red.inverse('Product IS updated!'));
+                return apiResponse.successResponse(res, "Product updated successfully");
+            } else {
+                console.log(chalk.red.inverse('Product not updated!'));
+                return apiResponse.errorResponse(res, 'Product not updated');
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     // async (req, res) => {
     //         try {
     //             //k wNote.findById(req.params.id, function (err, foundNote) {

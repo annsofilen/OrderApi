@@ -153,16 +153,28 @@ class MongooseStorage {
         if (users.length == 0) {
             console.log(`Seeding data to ${this.dbname}`)
             /* REGISTER SOME USERS */
-            const admin = await User.register({ username: 'annsofi', email: 'annsofi@n.fi', isConfirmed: true, }, 'annsofi');
-            const quest = await User.register({ username: 'evamari', email: 'evamari@n.fi', isConfirmed: true, }, 'evamari');
+            const annsofi = await User.register({ username: 'annsofi', email: 'annsofi@n.fi', isConfirmed: true, }, 'annsofi');
+            const evamari = await User.register({ username: 'evamari', email: 'evamari@n.fi', isConfirmed: true, }, 'evamari');
+            const ruth = await User.register({ username: 'ruth', email: 'ruth@n.fi', isConfirmed: true, }, 'ruth');
+            const esther = await User.register({ username: 'esther', email: 'evamari@n.fi', isConfirmed: true, }, 'esther');
+
+
 
             let annsofiOrder = await Order.create({})
             let evamariOrder = await Order.create({})
-
+            let ruthOrder = await Order.create({})
+            let estherOrder = await Order.create({})
 
 
             let product1 = await Product.create({ name: 'cat litter', brand: 'the best!', price: 12.99, description: 'your cat´s favorite litter', orderId: annsofiOrder })
-            let product2 = await Product.create({ name: 'cat food', brand: 'the best!', price: 5.99, description: 'your cat´s favorite food', orderId: evamariOrder })
+            let product2 = await Product.create({ name: 'cat food', brand: 'yummy!', price: 5.99, description: 'your cat´s favorite food', orderId: annsofiOrder })
+            let product3 = await Product.create({ name: 'cat toys', brand: 'the best!', price: 3.99, description: 'your cat´s favorite toy', orderId: evamariOrder })
+            let product4 = await Product.create({ name: 'cat nip', brand: 'the coolest!', price: 9.99, description: 'your cat´s favorite candy', orderId: annsofiOrder })
+
+            let product5 = await Product.create({ name: 'cat toys', brand: 'the best!', price: 3.99, description: 'your cat´s favorite toy', orderId: ruthOrder })
+            let product6 = await Product.create({ name: 'cat nip', brand: 'the coolest!', price: 9.99, description: 'your cat´s favorite candy', orderId: estherOrder })
+
+
 
 
             console.log(`Database ${this.dbname} seeded`);

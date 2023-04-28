@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import Product from '../models/ProductModel.js';
+import mongoose from 'mongoose';
 
 class MongooseProductManager {
     constructor() {
@@ -68,43 +69,85 @@ class MongooseProductManager {
 
 
 
-    async deleteProductOfOrderId(id) {
+    async deleteProductsOfOrderId(id) {
         // On a query we can use lean to get a plain javascript object
         // Use mongoose criteria for id and belongsTo user
         //pick user.id
         //console.log('id of order to delete: ' + id)
         const foundProducts = await this.productModel.find({ orderId: id });
-        console.log('product count: ' + foundProducts.length);
-        const result = await this.productModel.deleteMany({ orderId: id });
+
         if (foundProducts.length > 0) {
+            console.log('products count: ' + foundProducts.length);
+            let result = await this.productModel.deleteMany({ orderId: id });
             if (result.deletedCount > 0) {
-                console.log("Products deleted successfully")
-                return true
-            } else {
-                console.log("Product not found ")
-                return false
+                console.log("Delete count: " + result.deletedCount + JSON.stringify(result))
             }
+            if (result.deletedCount === 0) {
+                console.log("Delete count ZERO: " + result.deletedCount + JSON.stringify(result))
+            }
+            console.log("Products deleted successfully" + JSON.stringify(result))
+            return result
         } else {
-            console.log('no products pof orderid found')
+            console.log("No products found ")
             return false
         }
 
 
     }
 
-    async deleteProductOfId(productId) {
-        // On a query we can use lean to get a plain javascript object
-        // Use mongoose criteria for id and belongsTo user
-        //pick user.id
+    async deleteProductOfId(id) {
 
-        const result = await this.productModel.deleteOne({ id: productId });
+        const foundProducts = await this.productModel.find({ _id: id });
+        console.log('found: ' + foundProducts)
 
-        if (result.deletedCount > 1) {
-            console.log("Product deleted successfully")
-            return true
+        if (foundProducts.length > 0) {
+            console.log('Product count: ' + foundProducts.length);
+            let result = await this.productModel.deleteMany({ _id: id });
+            if (result.deletedCount > 0) {
+                console.log('product count: ' + foundProducts.length);
+                console.log("Delete count: " + result.deletedCount + JSON.stringify(result))
+            }
+            if (result.deletedCount === 0) {
+                console.log("Delete count ZERO: " + result.deletedCount + JSON.stringify(result))
+            }
+            console.log("Products deleted successfully" + JSON.stringify(result))
+            return result
         } else {
-            console.log("Product not found successfully")
+            console.log("No products found ")
             return false
+        }
+
+        /*         try {
+                    const product = await Product.findById(productId).lean().exec();
+                    if (!product) {
+                        console.log(`No product found with the given ID: ${productId}`);
+                        return null;
+                    }
+                    console.log(`Product found: ${JSON.stringify(product)}`);
+                    const result = await this.productModel.deleteOne({ id: productId }).exec();
+                    console.log(`Delete result: ${JSON.stringify(result)}`);
+                    return result;
+                } catch (error) {
+                    console.error(error);
+                    return null;
+                } */
+    }
+
+
+    async updateProductOfId(productId, newInfo) {
+        try {
+            const product = await Product.findById(productId).lean().exec();
+            if (!product) {
+                console.log(`No product found with the given ID: ${productId}`);
+                return null;
+            }
+            console.log(`Product found: ${JSON.stringify(product)}`);
+            const result = await this.productModel.updateOne({ id: productId }, { $set: { name: newInfo.name, pride: newInfo.price, brand: newInfo.brand, description: newInfo.description } }).exec();
+            console.log(`Update result: ${JSON.stringify(result)}`);
+            return result;
+        } catch (error) {
+            console.error(error);
+            return false;
         }
     }
 }

@@ -32,7 +32,7 @@ class OrdersApiController {
             const allOrders = await this.OrderManager.fetchAllOrders();
             if (allOrders.length > 0) {
                 const orders = allOrders.map(document => this.includeData(document));
-                console.log("list everything")
+                //console.log("list everything")
                 return apiResponse.successResponseWithData(res, "Operation success", orders);
             } else {
                 return apiResponse.successResponseWithData(res, "Operation success", []);
@@ -71,13 +71,20 @@ class OrdersApiController {
         try {
             const orderId = req.params.orderid;
             console.log(orderId + ' in delete in controller order ' + req.params.orderid);
-            let result = this.OrderManager.deleteOrder(req.params.orderid);
-            let result2 = this.theProductManager.deleteProductOfOrderId(req.params.orderid)
-            return apiResponse.successResponseWithData(res, "Order delete Success.")
+            let resultOrder = this.OrderManager.deleteOrder(req.params.orderid);
+            let resultProducts = this.theProductManager.deleteProductsOfOrderId(req.params.orderid)
+            if (resultOrder && resultProducts) {
+                return apiResponse.successResponse(res, "Order AND product delete Success.")
+            } else if (resultOrder) {
+                return apiResponse.successResponse(res, "Order delete Success.")
+            } else {
+                return apiResponse.errorResponse(res, 'The order will die another day. Could not delete order');
+            }
 
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: "Server error" });
+            //res.status(500).json({ message: "Server error" });
+            return apiResponse.errorResponse(res, 'Could delete create order');
 
         }
     }

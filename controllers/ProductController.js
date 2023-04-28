@@ -1,4 +1,6 @@
 import { check, body, validationResult } from "express-validator";
+import chalk from 'chalk';
+
 import apiResponse from "../helpers/apiResponse.js";
 import MongooseOrderManager from '../managers/MongooseOrderManager.js'
 import MongooseProductManager from '../managers/MongooseProductManager.js'
@@ -21,7 +23,9 @@ class ProductController {
             brand: data.brand,
             price: data.price,
             description: data.description,
-            createdAt: data.createdAt
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            id: data.id
         }
     }
 
@@ -35,7 +39,7 @@ class ProductController {
             const allProducts = await this.theProductManager.getProductOfOrderId(req.params.orderid);
             if (allProducts) {
                 const orders = allProducts.map(document => this.includeData(document));
-                console.log("list everything!!")
+                //console.log("list everything!!")
                 return apiResponse.successResponseWithData(res, "Operation success", orders);
             } else {
                 return apiResponse.successResponseWithData(res, "Operation success", []);
@@ -50,7 +54,7 @@ class ProductController {
 
     createProduct = async (req, res) => {
         try {
-            console.log('req head: ' + JSON.stringify(req.head))
+            //console.log('req head: ' + JSON.stringify(req.head))
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
@@ -72,20 +76,20 @@ class ProductController {
     }
 
     deleteOneProduct = async (req, res) => {
-        //console.log('order delete req.params.id: ' + req.params.orderid)
-
         try {
             const productId = req.params.productid;
-
-            let result = this.theProductManager.deleteProductOfId(req.params.productid);
-            console.log("reuslt: " + result)
+            console.log('req.params.productid: ' + req.params.productid)
+            const result = await this.theProductManager.deleteProductOfId(productId);
             if (result) {
-                return apiResponse.successResponseWithData(res, "Product delete Success.")
+                return apiResponse.successResponse(res, "Product deleted successfully");
+            } else {
+                console.log(chalk.red.inverse('Product not deleted!'));
+                return apiResponse.errorResponse(res, 'Product not found');
             }
-
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Server error" });
+            return apiResponse.errorResponse(res, 'Could not delete product');
         }
     }
 
@@ -95,16 +99,17 @@ class ProductController {
         try {
             const orderId = req.params.orderid;
 
-            let result = this.theProductManager.deleteProductOfOrderId(req.params.orderid);
-            console.log("reuslt: " + result)
+            let result = this.theProductManager.deleteProductsOfOrderId(req.params.orderid);
+            //console.log("reuslt: " + result)
             if (result) {
-                return apiResponse.successResponseWithData(res, "Products delete Success.")
+                return apiResponse.successResponse(res, "Many products delete Success.")
             }
 
 
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Server error" });
+            return apiResponse.errorResponse(res, 'Could not delete products');
         }
     }
 

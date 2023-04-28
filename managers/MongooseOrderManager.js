@@ -61,12 +61,14 @@ class MongooseAPIManager {
         //console.log('id of order to delete: ' + id)
 
         const result = await this.OrderModel.deleteOne({ _id: id });
-        await this.MongooseProductManager.deleteProductOfOrderId(id)
+        await this.MongooseProductManager.deleteProductsOfOrderId(id)
 
-        if (result.deletedCount === 1) {
+        if (result) {
             console.log("Order deleted successfully")
+            return result
         } else {
-            console.log("Order not found successfully")
+            console.log("Order not found")
+            return false
         }
 
     }

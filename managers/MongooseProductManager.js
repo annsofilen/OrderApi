@@ -142,7 +142,7 @@ class MongooseProductManager {
                 return null;
             }
             console.log(`Product found: ${JSON.stringify(product)}`);
-            const result = await this.productModel.updateOne({ id: productId }, { $set: { name: newInfo.name, pride: newInfo.price, brand: newInfo.brand, description: newInfo.description } }).exec();
+            const result = await this.productModel.updateOne({ _id: productId }, { $set: { name: newInfo.name, pride: newInfo.price, brand: newInfo.brand, description: newInfo.description } }).exec();
             console.log(`Update result: ${JSON.stringify(result)}`);
             return result;
         } catch (error) {

@@ -54,7 +54,7 @@ class ProductController {
 
     createProduct = async (req, res) => {
         try {
-            //console.log('req head: ' + JSON.stringify(req.head))
+            console.log('req body object: ' + JSON.stringify(req.body))
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());

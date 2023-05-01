@@ -58,20 +58,20 @@ class ProductController {
         try {
             console.log('req userr object: ' + (req.user))
             //const errors = validationResult(req);
-          //  if (!errors.isEmpty()) {
-               // return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+            //  if (!errors.isEmpty()) {
+            // return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
             //} else {
-                //Save product.
-                const createdProduct = await this.theProductManager.addProduct(req.body);
-                console.log('createdProduct: ' + createdProduct);
-                if (!createdProduct) {
-                    console.log("Could not create product");
-                    return apiResponse.errorResponse(res, 'Could not create product');
-                } else {
-                    let productData = this.includeData(createdProduct);
-                   // console.log(JSON.stringify(productData) + ' productData')
-                    return apiResponse.successResponseWithData(res, "product add Success.", productData);
-                };
+            //Save product.
+            const createdProduct = await this.theProductManager.addProduct(req.body);
+            console.log('createdProduct: ' + createdProduct);
+            if (!createdProduct) {
+                console.log("Could not create product");
+                return apiResponse.errorResponse(res, 'Could not create product');
+            } else {
+                let productData = this.includeData(createdProduct);
+                // console.log(JSON.stringify(productData) + ' productData')
+                return apiResponse.successResponseWithData(res, "product add Success.", productData);
+            };
             //}
         } catch (error) {
             return apiResponse.errorResponse(res, error);
@@ -80,6 +80,7 @@ class ProductController {
 
     deleteOneProduct = async (req, res) => {
         try {
+            console.log('req userr object: ' + (req.user))
             const productId = req.params.productid;
             console.log('req.params.productid: ' + req.params.productid)
             const result = await this.theProductManager.deleteProductOfId(productId);

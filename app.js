@@ -20,7 +20,7 @@ console.log('NODE_ENV:', process.env.NODE_ENV)
 // Routers
 import indexRouter from './routes/index.js'
 import apiRouter from './routes/api.js'
-//import AuthStrategy from './middlewares/auth/MongooseJwtApiAuthenticator.js'
+import AuthStrategy from './middlewares/auth/MongooseJwtApiAuthenticator.js'
 import apiResponse from './helpers/apiResponse.js'
 
 
@@ -73,7 +73,7 @@ Storage.ConnectCreateAndSeed(app)
 // =========================================================
 // Initialize the authentication middleware
 // ---------------------------------------------------------
-//AuthStrategy.initialize(app);
+AuthStrategy.initialize(app);
 // =========================================================
 
 //Route Prefixes

@@ -72,14 +72,17 @@ class MongooseJwtApiAuthenticator {
         UserModel.findOne({ _id: jwtPayload.sub }, (err, user) => {
             // Have error
             if (err) {
+                console.log('user have error')
                 return done(err, false);
             }
             // User exist
             else if (user) {
+                console.log('user exist')
                 return done(null, user);
             }
             // User doesn't exist
             else {
+                console.log('user does not exist')
                 return done(null, false);
             }
         });
@@ -97,6 +100,8 @@ class MongooseJwtApiAuthenticator {
         }), req.body.password, function (error, user) {
 
             if (error) {
+                //console.log(user)
+               // console.log(error)
                 return apiResponse.errorResponse(res, error);
             }
             const userData = {

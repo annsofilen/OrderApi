@@ -33,6 +33,46 @@ class MongooseAPIManager {
 
     }
 
+    async fetchUsersOrders(user) {
+        try {
+            //pickout the user.id
+            console.log('belongsTo: ' + user.id + ' ' + user._id)
+            const allOrders = await this.OrderModel.find({ belongsTo: user.id });
+            // Convert mongoose _id to id
+            const allOrderObjects = allOrders.map(element => {
+                return element.toObject()
+            })
+            console.log(chalk.blueBright.inverse('All orders loaded'));
+            return allOrderObjects
+        } catch (e) {
+            console.log(chalk.blueBright.inverse('Empty list of orders for user'));
+            return []
+        }
+    } catch(error) {
+
+    }
+
+    async addUserOrder(user, body) {
+        const newOrder = {
+            belongsTo: user.id
+        };
+        console.log('user.id: ' + user.id)
+        // Here we get a database document back, we like to return a POJO, plain javascript object back so we stay neutral to the db tech.
+        const addedOrderDocument = await this.OrderModel.create(newOrder);
+
+        if (addedOrderDocument) {
+            console.log(chalk.green.inverse('New order added!'));
+            // Convert from Mongoose to plain object
+            const savedOrder = addedOrderDocument.toObject();
+            //console.log((savedOrder.orderId))
+            return savedOrder;
+        } else
+            console.log(chalk.red.inverse('Error in db creating the new order!'))
+        // here when something wrong
+        return null;
+
+    }
+
 
 
     async addOrder() {
@@ -46,6 +86,7 @@ class MongooseAPIManager {
             console.log(chalk.green.inverse('New order added!'));
             // Convert from Mongoose to plain object
             const savedOrder = addedOrderDocument.toObject();
+            console.log("saved order: " + JSON.stringify(savedOrder))
             return savedOrder;
         } else
             console.log(chalk.red.inverse('Error in db creating the new order!'))

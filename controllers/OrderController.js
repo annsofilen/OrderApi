@@ -19,6 +19,7 @@ class OrdersApiController {
         return {
             id: data.id,
             createdAt: data.createdAt,
+            belongsTo: data.belongsTo
         }
     }
 
@@ -44,15 +45,34 @@ class OrdersApiController {
         }
     }
 
+    listUsersOrders = async (req, res) => {
+        try {
+            console.log('User listUsersOrder: ' + req.user + ', Body: ' + req.body)
+            const allOrders = await this.OrderManager.fetchUsersOrders(req.user);
+            if (allOrders.length > 0) {
+                const orders = allOrders.map(document => this.includeData(document));
+                //console.log("list everything")
+                return apiResponse.successResponseWithData(res, "Operation success", orders);
+            } else {
+                return apiResponse.successResponseWithData(res, "Operation success", []);
+            }
+            //});
+        } catch (err) {
+            //throw error in json response with status 500. 
+            return apiResponse.errorResponse(res, err);
+        }
+    }
+
 
     createOrder = async (req, res) => {
         try {
+            console.log('User createOrder: ' + req.user + ', Body: ' + JSON.stringify(req.body))
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
             } else {
                 //Save order.
-                const createdOrder = await this.OrderManager.addOrder(req.body);
+                const createdOrder = await this.OrderManager.addUserOrder(req.user, req.body);
                 if (!createdOrder) {
                     return apiResponse.errorResponse(res, 'Could not create order');
                 } else {

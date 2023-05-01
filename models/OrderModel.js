@@ -17,8 +17,8 @@ function changeIdType(ret) {
 const OrderSchema = new Schema({
     //title: {type: String, required: false},
     //body: {type: String, required: false},
-    
-    //belongsTo: { type: Schema.ObjectId, ref: "User", required: true },
+
+    belongsTo: { type: Schema.ObjectId, ref: "User", required: false },
 }, 
 {
     timestamps: true,

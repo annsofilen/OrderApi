@@ -54,7 +54,7 @@ class MongooseProductManager {
 
     async addProduct(newProduct) {
         //console.log(JSON.stringify(req.body))
-        console.log('productmanager newProduct: ' + JSON.stringify(newProduct))
+        console.log('productmanager newProduct orderid: ' + (newProduct.orderId))
         const addedProductDocument = await this.productModel.create(newProduct);
         console.log(addedProductDocument)
         if (addedProductDocument) {

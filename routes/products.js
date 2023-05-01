@@ -1,5 +1,5 @@
 import express from 'express';
-//import Authenticator from '../middlewares/auth/MongooseJwtApiAuthenticator.js'
+import Authenticator from '../middlewares/auth/MongooseJwtApiAuthenticator.js'
 import productController from '../controllers/ProductController.js'
 
 
@@ -9,8 +9,8 @@ const theProductController = new productController();
 const router = express.Router();
 
 
-router.get("/:orderid", theProductController.listAllProducts)
-router.post("/", theProductController.createProduct);
+router.get("/:orderid", Authenticator.authenticateApi, theProductController.listAllProducts)
+router.post("/", Authenticator.authenticateApi, theProductController.createProduct);
 router.delete("/:productid", theProductController.deleteOneProduct)
 router.put("/:productid", theProductController.updateProduct)
 

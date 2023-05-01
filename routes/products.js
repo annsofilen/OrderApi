@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/:orderid", Authenticator.authenticateApi, theProductController.listAllProducts)
 router.post("/", Authenticator.authenticateApi, theProductController.createProduct);
 router.delete("/:productid", theProductController.deleteOneProduct)
-router.put("/:productid", theProductController.updateProduct)
+router.put("/:productid", Authenticator.authenticateApi, theProductController.updateProduct)
 
 //router.delete("/:orderid", theProductController.deleteManyProductsOrderId) //will never be used
 

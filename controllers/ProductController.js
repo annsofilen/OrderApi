@@ -36,6 +36,8 @@ class ProductController {
     */
     listAllProducts = async (req, res) => {
         try {
+            console.log('req userr object: ' + (req.user))
+            //console.log(req.user)
             const allProducts = await this.theProductManager.getProductOfOrderId(req.params.orderid);
             if (allProducts) {
                 const orders = allProducts.map(document => this.includeData(document));
@@ -55,7 +57,7 @@ class ProductController {
     createProduct = async (req, res) => {
         try {
             console.log('req userr object: ' + (req.user))
-            const errors = validationResult(req);
+            //const errors = validationResult(req);
           //  if (!errors.isEmpty()) {
                // return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
             //} else {
@@ -116,6 +118,7 @@ class ProductController {
 
     updateProduct = async (req, res) => {
         try {
+            console.log('req userr object: ' + (req.user))
             const productId = req.params.productid;
             let updateObject = req.body;
             console.log('req.params.productid: ' + req.params.productid)

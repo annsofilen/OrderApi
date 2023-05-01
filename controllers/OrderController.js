@@ -89,6 +89,7 @@ class OrdersApiController {
         //console.log('order delete req.params.id: ' + req.params.orderid)
 
         try {
+            console.log('req userr object: ' + (req.user))
             const orderId = req.params.orderid;
             console.log(orderId + ' in delete in controller order ' + req.params.orderid);
             let resultOrder = this.OrderManager.deleteOrder(req.params.orderid);
